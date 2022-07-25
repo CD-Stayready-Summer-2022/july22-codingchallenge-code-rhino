@@ -1,5 +1,7 @@
 package com.codedifferently;
 
+import java.util.*;
+
 public class Solution {
     /**
      * You will be given an integer called number and an array called possibleFamilyMembers
@@ -18,6 +20,32 @@ public class Solution {
      * @return
      */
     public Integer[] numberFamily(Integer number, Integer[] possibleFamilyMembers){
-        return null;
+        Arrays.sort(possibleFamilyMembers);
+        Map<Integer, Set<Integer>> familes = new HashMap<>();
+        Set<Integer> family = new TreeSet<>();
+        familes.put(possibleFamilyMembers[0],family);
+        for(int j = 0; j <possibleFamilyMembers.length; j++){
+            for(int x = j+1; x < possibleFamilyMembers.length; x++){
+                Integer currentValue = possibleFamilyMembers[x-1];
+                Integer nextValue = possibleFamilyMembers[x];
+                if((nextValue - currentValue) <=1){
+                    family.add(nextValue);
+                    family.add(currentValue);
+                }else if((nextValue - currentValue)> 1){
+                    family = new TreeSet<>();
+                    familes.put(currentValue, family);
+                }
+            }
+        }
+
+        Integer[] response = new Integer[0];
+        for(Map.Entry<Integer, Set<Integer>> entry: familes.entrySet()){
+            Set<Integer> value = entry.getValue();
+            if(value.contains(number)){
+                response = new Integer[value.size()];
+                System.arraycopy(value.toArray(), 0, response, 0, value.size());
+            }
+        }
+        return response;
     }
 }
